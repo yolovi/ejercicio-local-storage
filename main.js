@@ -13,6 +13,7 @@ const inputMensaje = document.querySelector("#mensaje");
 
 // // Crea una función que cuando envíes el formulario muestre por consola los datos de contacto rellenados
 // Para que no recargue la pagina por defecto. Crear una constate donde guardaremos el valor del input.
+let userJson = JSON.parse(localStorage.getItem("usuario"));
 
 
 
@@ -41,17 +42,17 @@ function onSubmit(e) {
   // Esto convierte el objeto en un JSON string solo para poder guardarlo en el local storage del navegador (Lo convierte y lo guarda):
 localStorage.setItem("usuario", JSON.stringify(user)); 
 
+//  Realiza el proceso inverso para poder obtener de nuevo nuestro objeto. Lo recogemos del Local Storage
+
+userJson = JSON.parse(localStorage.getItem("usuario"));
 //  Esto es una llamada a la funcion que he creado mas abajo para guardar los datos al realizar el submit
 
 guardarDatos(userJson)
 console.log(arrayDatos)
 
-
+pintarPorPantalla() 
 }
 
-//  Realiza el proceso inverso para poder obtener de nuevo nuestro objeto. Lo recogemos del Local Storage
-
-let userJson = JSON.parse(localStorage.getItem("usuario"));
 
 
 // Fuera de la funcion. Le decimos al botón que cuando escuche el evento “click” ejecute la función que hemos creado:
@@ -61,17 +62,20 @@ inputBtn.addEventListener("click", onSubmit);
 // Pista: utiliza JSON.parse() y JSON.stringify() 
 
 // ERROR. SOLO ME FUNCIONA AL REFRESCAR LA PAGINA. DESPUES DE ENVIAR
-let p = document.createElement("p");
-let pTexto = document.createTextNode(JSON.stringify(userJson));
-let textoSinCaracteres = pTexto.data.replace(/[{}"]/g, ""); // Utilizar expresión regular para eliminar los caracteres no deseados
+function pintarPorPantalla() {
+  
+  let p = document.createElement("p");
+  let pTexto = userJson.nombre + userJson.correo
+  p.innerText = pTexto;
+  document.body.appendChild(p);
+}
 
-p.appendChild(document.createTextNode(textoSinCaracteres)); // introduce en el parrafo los datos rectificados
-document.body.appendChild(p);
-
+pintarPorPantalla() 
 // Funcion para guardar los datos en un array vacio
 let arrayDatos = [];
 function guardarDatos(dato){
   arrayDatos.push(dato);
+  localStorage.setItem("usuarios",JSON.stringify(arrayDatos))
 }
 
 console.log(arrayDatos)
